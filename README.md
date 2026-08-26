@@ -1,0 +1,712 @@
+[department-cup (6).html](https://github.com/user-attachments/files/31470364/department-cup.6.html)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Department Cup</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap');
+
+:root{
+  --cream:#F2EADF;
+  --cream-dim:#e8ddcd;
+  --card:#fbf7f0;
+  --maroon-900:#3A0E18;
+  --maroon-800:#4A1220;
+  --maroon-700:#611A2C;
+  --crimson:#E01446;
+  --crimson-light:#ff5d7e;
+  --ink:#2b0d14;
+  --muted:#8a6b70;
+  --line:rgba(58,14,24,0.14);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:transparent;}
+body{
+  font-family:'Barlow', sans-serif;
+  color:var(--ink);
+  background:var(--cream);
+  min-height:100vh;
+}
+
+.wrap{max-width:960px;margin:0 auto;padding:28px 20px 60px;}
+
+/* ---------- header ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px;flex-wrap:wrap;gap:12px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-badge{
+  width:38px;height:38px;border-radius:50%;background:var(--crimson);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 3px 10px rgba(224,20,70,0.35);
+}
+.brand-badge svg{width:20px;height:20px;}
+.brand-text{font-family:'Barlow Condensed';font-weight:700;letter-spacing:0.14em;font-size:13px;color:var(--maroon-900);text-transform:uppercase;}
+.brand-text span{display:block;font-size:10px;letter-spacing:0.22em;color:var(--muted);font-weight:600;}
+.live-pill{
+  display:flex;align-items:center;gap:7px;font-family:'Barlow Condensed';font-weight:600;
+  font-size:12px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;
+}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--crimson);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.25;}}
+
+/* ---------- hero ---------- */
+.hero{margin-bottom:30px;}
+.hero h1{
+  font-family:'Anton';font-weight:400;text-transform:uppercase;
+  font-size:clamp(40px,8vw,72px);line-height:0.92;letter-spacing:0.01em;
+  color:var(--maroon-900);margin:0;
+}
+.hero h1 em{font-style:normal;color:var(--crimson);}
+.hero-sub{
+  font-family:'Barlow Condensed';font-weight:600;font-size:16px;letter-spacing:0.08em;
+  color:var(--maroon-700);text-transform:uppercase;margin-top:6px;
+}
+.finish-line{
+  height:5px;margin-top:20px;border-radius:3px;
+  background:linear-gradient(90deg,var(--maroon-900) 0%, var(--maroon-800) 55%, var(--crimson) 78%, var(--crimson-light) 100%);
+}
+
+/* ---------- stat row ---------- */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 34px;}
+.stat-card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.stat-card .num{font-family:'Anton';font-size:30px;color:var(--maroon-900);line-height:1;}
+.stat-card .lbl{font-family:'Barlow Condensed';font-weight:600;font-size:11.5px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-top:5px;}
+.clock-card{display:flex;flex-direction:row;align-items:center;gap:14px;}
+.clock-ring{position:relative;width:56px;height:56px;flex-shrink:0;}
+.clock-ring svg{width:56px;height:56px;transform:rotate(-90deg);}
+.clock-ring .bg{fill:none;stroke:var(--line);stroke-width:6;}
+.clock-ring .fg{fill:none;stroke:var(--crimson);stroke-width:6;stroke-linecap:round;transition:stroke-dasharray 0.4s;}
+.clock-ring .day-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:14px;color:var(--maroon-900);}
+
+/* ---------- section label ---------- */
+.section-lbl{
+  font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:0.16em;
+  color:var(--maroon-800);text-transform:uppercase;margin:0 0 14px;display:flex;align-items:center;gap:10px;
+}
+.section-lbl::after{content:"";flex:1;height:1px;background:var(--line);}
+
+/* ---------- leaderboard (signature element) ---------- */
+.track{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px;margin-bottom:34px;overflow:hidden;}
+.lane{
+  position:relative;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:12px;margin-bottom:6px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 22px, rgba(58,14,24,0.05) 22px 24px),
+    var(--cream);
+}
+.lane:last-child{margin-bottom:0;}
+.lane-rank{
+  font-family:'Anton';font-size:15px;color:var(--muted);width:20px;text-align:center;flex-shrink:0;
+}
+.lane-rank.gold{color:var(--crimson);}
+.lane-badge{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Anton';font-size:16px;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.18);
+}
+.lane-body{flex:1;min-width:0;}
+.lane-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px;}
+.lane-name{font-family:'Barlow Condensed';font-weight:700;font-size:16px;color:var(--maroon-900);text-transform:uppercase;letter-spacing:0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lane-score{font-family:'Anton';font-size:22px;color:var(--maroon-900);flex-shrink:0;}
+.lane-bar-bg{height:9px;border-radius:5px;background:var(--cream-dim);overflow:hidden;}
+.lane-bar-fg{height:100%;border-radius:5px;transition:width 0.5s ease;}
+.lane-crown{font-size:15px;flex-shrink:0;}
+
+/* ---------- ticker ---------- */
+.ticker{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 16px;margin-bottom:34px;max-height:280px;overflow-y:auto;}
+.tick-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);}
+.tick-row:last-child{border-bottom:none;}
+.tick-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.tick-text{flex:1;font-size:14px;color:var(--ink);}
+.tick-text b{font-family:'Barlow Condensed';font-weight:700;color:var(--maroon-900);}
+.tick-pts{font-family:'Anton';font-size:15px;flex-shrink:0;}
+.tick-pts.pos{color:var(--crimson);}
+.tick-pts.neg{color:var(--maroon-700);}
+.tick-time{font-family:'Barlow Condensed';font-size:11px;color:var(--muted);flex-shrink:0;width:64px;text-align:right;}
+.tick-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;flex-shrink:0;line-height:1;padding:2px 4px;}
+.tick-del:hover{color:var(--crimson);}
+.empty-note{padding:20px 4px;color:var(--muted);font-size:14px;font-style:italic;}
+
+/* ---------- guide ---------- */
+details.guide{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:34px;}
+details.guide summary{
+  font-family:'Barlow Condensed';font-weight:700;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--maroon-900);cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;
+}
+details.guide summary::-webkit-details-marker{display:none;}
+details.guide summary::before{content:"▸";color:var(--crimson);transition:transform 0.2s;}
+details.guide[open] summary::before{transform:rotate(90deg);}
+.guide-grid{margin-top:14px;display:grid;grid-template-columns:1fr auto;row-gap:9px;column-gap:12px;}
+.guide-grid .g-act{font-size:14px;color:var(--ink);}
+.guide-grid .g-pt{font-family:'Anton';font-size:15px;text-align:right;}
+.guide-grid .g-pt.neg{color:var(--maroon-700);}
+.guide-grid .g-pt.pos{color:var(--crimson);}
+.guide-div{grid-column:1/-1;height:1px;background:var(--line);}
+
+/* ---------- footer ---------- */
+.foot{display:flex;align-items:center;gap:10px;margin-top:40px;color:var(--muted);font-family:'Barlow Condensed';font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;}
+.foot .rule{width:1px;height:14px;background:var(--line);}
+
+/* ---------- admin ---------- */
+.admin-banner{
+  background:var(--maroon-900);color:var(--cream);font-family:'Barlow Condensed';font-weight:600;
+  font-size:12.5px;letter-spacing:0.1em;text-transform:uppercase;padding:9px 16px;border-radius:10px;
+  margin-bottom:22px;display:flex;align-items:center;gap:8px;
+}
+.admin-banner .dot{width:7px;height:7px;border-radius:50%;background:var(--crimson);}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:24px;}
+.panel h3{
+  font-family:'Barlow Condensed';font-weight:700;font-size:14px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--maroon-900);margin:0 0 16px;
+}
+.form-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;align-items:center;}
+.form-row label{font-family:'Barlow Condensed';font-weight:600;font-size:12px;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase;margin-right:-2px;}
+select,input[type=text],input[type=number],input[type=date]{
+  font-family:'Barlow';font-size:14px;padding:9px 11px;border-radius:9px;border:1px solid var(--line);
+  background:#fff;color:var(--ink);outline:none;
+}
+select:focus,input:focus{border-color:var(--crimson);}
+input[type=color]{width:40px;height:38px;padding:2px;border-radius:9px;border:1px solid var(--line);background:#fff;cursor:pointer;}
+.btn{
+  font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
+  background:var(--crimson);color:#fff;border:none;border-radius:9px;padding:10px 18px;cursor:pointer;transition:filter 0.15s;
+}
+.btn:hover{filter:brightness(1.08);}
+.btn.secondary{background:var(--maroon-900);}
+.btn.ghost{background:transparent;color:var(--maroon-800);border:1px solid var(--line);}
+.btn.small{padding:6px 12px;font-size:11.5px;}
+.team-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.team-row input[type=text]{flex:1;min-width:0;}
+.pin-gate{
+  min-height:70vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;
+}
+.pin-gate .brand-badge{width:56px;height:56px;margin-bottom:6px;}
+.pin-gate .brand-badge svg{width:30px;height:30px;}
+.pin-gate h2{font-family:'Anton';font-size:26px;color:var(--maroon-900);margin:0;text-transform:uppercase;}
+.pin-gate p{color:var(--muted);font-size:14px;max-width:320px;margin:0;}
+.pin-gate input{width:180px;text-align:center;letter-spacing:0.3em;font-size:18px;}
+.pin-gate .err{color:var(--crimson);font-size:13px;font-family:'Barlow Condensed';font-weight:600;min-height:16px;}
+.hint{font-size:12.5px;color:var(--muted);margin-top:4px;}
+
+@media(max-width:640px){
+  .stat-row{grid-template-columns:1fr;}
+  .lane{flex-wrap:wrap;}
+  .lane-score{font-size:19px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div style="padding:60px 0;text-align:center;font-family:'Barlow Condensed';color:#8a6b70;">Loading the scoreboard…</div>
+</div>
+
+<script>
+const QOOKER_Q = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="2.4"/><line x1="15.5" y1="15.5" x2="19.5" y2="19.5" stroke="white" stroke-width="2.4" stroke-linecap="round"/></svg>';
+
+function defaultActivities(){
+  return [
+    {id:'a1', label:"5-star Trustpilot mention", pts:1},
+    {id:'a2', label:"Winner of Weekly Bingo", pts:1},
+    {id:'a3', label:"MVP", pts:2},
+    {id:'a4', label:"Highest total contacts (week)", pts:4},
+    {id:'a5', label:"Star of the Month", pts:5},
+    {id:'a6', label:"Lateness", pts:-1},
+    {id:'a7', label:"1\u20133 star Trustpilot mention", pts:-5},
+  ];
+}
+
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJi7AL1zwMn0CxTljH2rJq_wNQqi2hxyq7NQeGq4DZLSAN7IZyZOiDCZ3wbSlhnb8G/exec';
+const PALETTE = ["#E01446","#4A1220","#C2694B","#611A2C","#8a2f4f","#a8763f"];
+
+const STATE_KEY = 'cup_state_v1';
+const params = new URLSearchParams(window.location.search);
+const isAdminLink = params.get('mode') === 'admin';
+let adminUnlocked = false;
+let state = null;
+let pollTimer = null;
+let lastLoadFailed = false;
+
+function defaultState(){
+  const start = new Date();
+  return {
+    startDate: start.toISOString().slice(0,10),
+    durationDays: 90,
+    pin: "",
+    teams: [
+      {id:'t1', name:"Cameron's Team", color:'#E01446'},
+      {id:'t2', name:"Mac's Team", color:'#4A1220'},
+      {id:'t3', name:"Elen's Team", color:'#C2694B'},
+    ],
+    activities: defaultActivities(),
+    log: []
+  };
+}
+
+function migrate(d){
+  if(!Array.isArray(d.activities) || d.activities.length===0){ d.activities = defaultActivities(); }
+  return d;
+}
+
+async function loadState(){
+  const res = await fetch(GOOGLE_SCRIPT_URL, {method:'GET'});
+  if(!res.ok){ throw new Error('Server responded with '+res.status); }
+  const text = await res.text();
+  if(!text || !text.trim()){
+    const d = defaultState();
+    await saveStateRaw(d);
+    return d;
+  }
+  return migrate(JSON.parse(text));
+}
+
+async function saveStateRaw(data){
+  const res = await fetch(GOOGLE_SCRIPT_URL, {
+    method:'POST',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(data)
+  });
+  if(!res.ok){ throw new Error('Server responded with '+res.status); }
+}
+
+async function saveState(){
+  try{
+    await saveStateRaw(state);
+  }catch(e){
+    console.error('Save failed', e);
+    alert('Could not save that change \u2013 check your internet connection and try again. (If this keeps happening, the Google Sheet connection may need re-checking.)');
+  }
+}
+
+function totalsByTeam(){
+  const map = {};
+  state.teams.forEach(t=>map[t.id]=0);
+  state.log.forEach(l=>{ if(map[l.teamId]!==undefined) map[l.teamId]+=l.pts; });
+  return map;
+}
+
+function fmtTime(ts){
+  const d = new Date(ts);
+  const now = new Date();
+  const diffMs = now - d;
+  const diffMin = Math.round(diffMs/60000);
+  if(diffMin < 1) return 'just now';
+  if(diffMin < 60) return diffMin+'m ago';
+  const diffH = Math.round(diffMin/60);
+  if(diffH < 24) return diffH+'h ago';
+  return d.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+}
+
+function dayInfo(){
+  const start = new Date(state.startDate+'T00:00:00');
+  const dur = state.durationDays || 90;
+  const now = new Date();
+  let elapsed = Math.floor((now-start)/86400000)+1;
+  if(elapsed < 1) elapsed = 1;
+  if(elapsed > dur) elapsed = dur;
+  const remaining = Math.max(0, dur - elapsed);
+  const pct = Math.min(1, elapsed/dur);
+  const end = new Date(start.getTime()+dur*86400000);
+  return {elapsed, dur, remaining, pct, endStr: end.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})};
+}
+
+function render(){
+  const totals = totalsByTeam();
+  const ranked = state.teams.map(t=>({...t, pts: totals[t.id]||0})).sort((a,b)=>b.pts-a.pts);
+  const maxPts = Math.max(1, ...ranked.map(r=>Math.max(r.pts,0)));
+  const di = dayInfo();
+  const circumference = 2*Math.PI*24;
+  const dash = circumference*di.pct;
+
+  const totalPointsAwarded = state.log.reduce((s,l)=>s+ (l.pts>0?l.pts:0),0);
+
+  let html = '';
+
+  html += '<div class="topbar">';
+  html += '<div class="brand"><div class="brand-badge">'+QOOKER_Q+'</div>';
+  html += '<div class="brand-text">Department Cup<span>Improving every day</span></div></div>';
+  html += '<div class="live-pill"><div class="live-dot"></div>Live scoreboard</div>';
+  html += '</div>';
+
+  if(isAdminLink && adminUnlocked){
+    html += '<div class="admin-banner"><div class="dot"></div>Team Manager view \u2013 changes save instantly, but this screen won\u2019t auto-refresh while you\u2019re editing<button class="btn ghost small" id="manual-refresh" style="margin-left:auto;background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;">Refresh</button></div>';
+  }
+
+  html += '<div class="hero">';
+  html += '<h1>Team vs Team<br><em>vs Team</em></h1>';
+  html += '<div class="hero-sub">Better Than Yesterday &middot; Three months, one trophy, every point counts</div>';
+  html += '<div class="finish-line"></div>';
+  html += '</div>';
+
+  html += '<div class="stat-row">';
+  html += '<div class="stat-card"><div class="num">'+ranked[0].pts+'</div><div class="lbl">Leading &mdash; '+escapeHtml(ranked[0].name)+'</div></div>';
+  html += '<div class="stat-card"><div class="num">'+totalPointsAwarded+'</div><div class="lbl">Points logged so far</div></div>';
+  html += '<div class="stat-card clock-card"><div class="clock-ring"><svg viewBox="0 0 56 56"><circle class="bg" cx="28" cy="28" r="24"/><circle class="fg" cx="28" cy="28" r="24" stroke-dasharray="'+dash.toFixed(1)+' '+circumference.toFixed(1)+'"/></svg><div class="day-num">'+di.elapsed+'</div></div><div><div class="num" style="font-size:20px;">'+di.remaining+' days left</div><div class="lbl">Ends '+di.endStr+'</div></div></div>';
+  html += '</div>';
+
+  html += '<div class="section-lbl">Leaderboard</div>';
+  html += '<div class="track">';
+  ranked.forEach((r,i)=>{
+    const widthPct = r.pts<=0 ? 4 : Math.max(6, Math.round((r.pts/maxPts)*100));
+    const crown = i===0 && r.pts>0 ? '<span class="lane-crown">\uD83C\uDFC6</span>' : '';
+    html += '<div class="lane">';
+    html += '<div class="lane-rank '+(i===0?'gold':'')+'">'+(i+1)+'</div>';
+    html += '<div class="lane-badge" style="background:'+r.color+';">'+escapeHtml((r.name||'?').charAt(0).toUpperCase())+'</div>';
+    html += '<div class="lane-body">';
+    html += '<div class="lane-top"><div class="lane-name">'+escapeHtml(r.name)+'</div><div class="lane-score">'+r.pts+' pts'+crown+'</div></div>';
+    html += '<div class="lane-bar-bg"><div class="lane-bar-fg" style="width:'+widthPct+'%;background:'+r.color+';"></div></div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="section-lbl">Recent activity</div>';
+  html += '<div class="ticker">';
+  const logs = [...state.log].sort((a,b)=>b.ts-a.ts);
+  if(logs.length===0){
+    html += '<div class="empty-note">No points logged yet \u2013 the board will fill up as the cup gets underway.</div>';
+  } else {
+    logs.slice(0, isAdminLink && adminUnlocked ? logs.length : 12).forEach(l=>{
+      const team = state.teams.find(t=>t.id===l.teamId) || {name:'Unknown', color:'#999'};
+      html += '<div class="tick-row">';
+      html += '<div class="tick-dot" style="background:'+team.color+';"></div>';
+      html += '<div class="tick-text"><b>'+escapeHtml(team.name)+'</b> &mdash; '+escapeHtml(l.activity)+(l.note?' <span style="color:#8a6b70;">('+escapeHtml(l.note)+')</span>':'')+'</div>';
+      html += '<div class="tick-pts '+(l.pts>=0?'pos':'neg')+'">'+(l.pts>0?'+':'')+l.pts+'</div>';
+      html += '<div class="tick-time">'+fmtTime(l.ts)+'</div>';
+      if(isAdminLink && adminUnlocked){
+        html += '<button class="tick-del" data-del="'+l.id+'" title="Remove entry">\u00d7</button>';
+      }
+      html += '</div>';
+    });
+  }
+  html += '</div>';
+
+  html += '<details class="guide"><summary>Points guide</summary><div class="guide-grid">';
+  state.activities.forEach((a,i)=>{
+    html += '<div class="g-act">'+escapeHtml(a.label)+'</div><div class="g-pt '+(a.pts>0?'pos':'neg')+'">'+(a.pts>0?'+':'')+a.pts+'</div>';
+    if(i<state.activities.length-1) html += '<div class="guide-div"></div>';
+  });
+  html += '</div></details>';
+
+  if(isAdminLink && adminUnlocked){
+    html += renderAdminPanels();
+  }
+
+  html += '<div class="foot"><div>Department Cup</div><div class="rule"></div><div>'+(isAdminLink&&adminUnlocked?'Team Manager link':'Shared with the team')+'</div></div>';
+
+  document.getElementById('app').innerHTML = html;
+
+  if(isAdminLink && adminUnlocked){
+    document.querySelectorAll('[data-del]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        captureFormEdits();
+        const id = btn.getAttribute('data-del');
+        state.log = state.log.filter(l=>l.id!==id);
+        await saveState();
+        render();
+      });
+    });
+    wireAdminForms();
+  }
+}
+
+function renderAdminPanels(){
+  let html = '';
+
+  html += '<div class="panel"><h3>Add points</h3>';
+  html += '<div class="form-row">';
+  html += '<label>Team</label><select id="pt-team">';
+  state.teams.forEach(t=>{ html += '<option value="'+t.id+'">'+escapeHtml(t.name)+'</option>'; });
+  html += '</select>';
+  html += '<label>Activity</label><select id="pt-activity">';
+  state.activities.forEach(a=>{ html += '<option value="'+a.id+'">'+escapeHtml(a.label)+' ('+(a.pts>0?'+':'')+a.pts+')</option>'; });
+  html += '<option value="custom">Custom&hellip;</option>';
+  html += '</select>';
+  html += '</div>';
+  html += '<div class="form-row" id="pt-custom-row" style="display:none;">';
+  html += '<label>Label</label><input type="text" id="pt-custom-label" placeholder="e.g. Client shoutout">';
+  html += '<label>Points</label><input type="number" id="pt-custom-pts" style="width:80px;" value="1">';
+  html += '</div>';
+  html += '<div class="form-row">';
+  html += '<label>Note</label><input type="text" id="pt-note" placeholder="Optional note" style="flex:1;min-width:160px;">';
+  html += '<button class="btn" id="pt-submit">Add points</button>';
+  html += '</div></div>';
+
+  html += '<div class="panel"><h3>Teams &amp; colours</h3><div id="team-list">';
+  state.teams.forEach(t=>{
+    html += '<div class="team-row" data-team="'+t.id+'">';
+    html += '<input type="color" class="team-color" value="'+t.color+'">';
+    html += '<input type="text" class="team-name" value="'+escapeHtml(t.name)+'">';
+    html += '<button class="btn ghost small" data-remove-team="'+t.id+'"'+(state.teams.length<=2?' disabled':'')+'>Remove</button>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="form-row"><button class="btn secondary small" id="add-team">+ Add team</button><button class="btn small" id="save-teams">Save changes</button></div>';
+  html += '</div>';
+
+  html += '<div class="panel"><h3>Points guide</h3><div id="activity-list">';
+  state.activities.forEach(a=>{
+    html += '<div class="team-row" data-activity="'+a.id+'">';
+    html += '<input type="text" class="activity-label" value="'+escapeHtml(a.label)+'" style="flex:1;min-width:120px;">';
+    html += '<input type="number" class="activity-pts" value="'+a.pts+'" style="width:70px;">';
+    html += '<button class="btn ghost small" data-remove-activity="'+a.id+'"'+(state.activities.length<=1?' disabled':'')+'>Remove</button>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="form-row"><button class="btn secondary small" id="add-activity">+ Add activity</button><button class="btn small" id="save-activities">Save changes</button></div>';
+  html += '</div>';
+
+  const di = dayInfo();
+  html += '<div class="panel"><h3>Competition settings</h3>';
+  html += '<div class="form-row">';
+  html += '<label>Start date</label><input type="date" id="set-start" value="'+state.startDate+'">';
+  html += '<label>Length (days)</label><input type="number" id="set-duration" value="'+state.durationDays+'" style="width:80px;">';
+  html += '<button class="btn small" id="save-settings">Save</button>';
+  html += '</div>';
+  html += '<div class="form-row"><button class="btn ghost small" id="reset-comp">Reset all points</button><span class="hint">Clears the activity log and starts the score back at zero &mdash; team names and colours stay the same.</span></div>';
+  html += '<div class="form-row"><button class="btn ghost small" id="change-pin">Change manager PIN</button></div>';
+  html += '</div>';
+
+  html += '<div class="panel"><h3>Sharing</h3>';
+  html += '<div class="hint" style="font-size:13px;line-height:1.5;">Share the plain link (without <code>?mode=admin</code>) with the team for the read-only leaderboard. Keep this link, with <code>?mode=admin</code>, for yourself and anyone else who should be able to add points &mdash; it always asks for the manager PIN.</div>';
+  html += '</div>';
+
+  return html;
+}
+
+function captureFormEdits(){
+  document.querySelectorAll('.team-row[data-team]').forEach(row=>{
+    const id = row.getAttribute('data-team');
+    const t = state.teams.find(t=>t.id===id);
+    if(!t) return;
+    const nameInput = row.querySelector('.team-name');
+    const colorInput = row.querySelector('.team-color');
+    if(nameInput && nameInput.value.trim()) t.name = nameInput.value.trim();
+    if(colorInput && colorInput.value) t.color = colorInput.value;
+  });
+  document.querySelectorAll('.team-row[data-activity]').forEach(row=>{
+    const id = row.getAttribute('data-activity');
+    const a = state.activities.find(a=>a.id===id);
+    if(!a) return;
+    const labelInput = row.querySelector('.activity-label');
+    const ptsInput = row.querySelector('.activity-pts');
+    if(labelInput && labelInput.value.trim()) a.label = labelInput.value.trim();
+    if(ptsInput && ptsInput.value!==''){ const p = parseInt(ptsInput.value,10); if(!isNaN(p)) a.pts = p; }
+  });
+  const startInput = document.getElementById('set-start');
+  const durInput = document.getElementById('set-duration');
+  if(startInput && startInput.value) state.startDate = startInput.value;
+  if(durInput && durInput.value){
+    const d = parseInt(durInput.value,10);
+    if(d>0) state.durationDays = d;
+  }
+}
+
+function wireAdminForms(){
+  const refreshBtn = document.getElementById('manual-refresh');
+  if(refreshBtn){
+    refreshBtn.addEventListener('click', async ()=>{
+      captureFormEdits();
+      if(!confirm('Pull the latest from the server? Any unsaved edits here will be kept locally but not yet saved.')) return;
+      try{
+        const server = await loadState();
+        server.teams = state.teams;
+        server.activities = state.activities;
+        server.startDate = state.startDate;
+        server.durationDays = state.durationDays;
+        state = server;
+        render();
+      }catch(e){
+        alert('Could not reach the Google Sheet \u2013 check your connection and try again.');
+      }
+    });
+  }
+
+  const actSel = document.getElementById('pt-activity');
+  const customRow = document.getElementById('pt-custom-row');
+  actSel.addEventListener('change', ()=>{
+    customRow.style.display = actSel.value==='custom' ? 'flex' : 'none';
+  });
+
+  document.getElementById('pt-submit').addEventListener('click', async ()=>{
+    captureFormEdits();
+    const teamId = document.getElementById('pt-team').value;
+    const note = document.getElementById('pt-note').value.trim();
+    let activity, pts;
+    if(actSel.value==='custom'){
+      activity = document.getElementById('pt-custom-label').value.trim() || 'Custom entry';
+      pts = parseInt(document.getElementById('pt-custom-pts').value,10) || 0;
+    } else {
+      const a = state.activities.find(a=>a.id===actSel.value);
+      activity = a ? a.label : 'Unknown activity'; pts = a ? a.pts : 0;
+    }
+    state.log.push({id: 'l'+Date.now()+Math.random().toString(16).slice(2), ts: Date.now(), teamId, activity, pts, note});
+    await saveState();
+    render();
+  });
+
+  document.getElementById('add-team').addEventListener('click', async ()=>{
+    captureFormEdits();
+    const usedColors = state.teams.map(t=>t.color);
+    const nextColor = PALETTE.find(c=>!usedColors.includes(c)) || '#999999';
+    state.teams.push({id:'t'+Date.now(), name:'New Team', color: nextColor});
+    await saveState();
+    render();
+  });
+
+  document.querySelectorAll('[data-remove-team]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.getAttribute('data-remove-team');
+      if(state.teams.length<=2) return;
+      if(!confirm('Remove this team? Its logged points will also be removed from the board.')) return;
+      captureFormEdits();
+      state.teams = state.teams.filter(t=>t.id!==id);
+      state.log = state.log.filter(l=>l.teamId!==id);
+      await saveState();
+      render();
+    });
+  });
+
+  document.getElementById('save-teams').addEventListener('click', async ()=>{
+    captureFormEdits();
+    await saveState();
+    render();
+  });
+
+  document.getElementById('add-activity').addEventListener('click', async ()=>{
+    captureFormEdits();
+    state.activities.push({id:'a'+Date.now(), label:'New activity', pts:1});
+    await saveState();
+    render();
+  });
+
+  document.querySelectorAll('[data-remove-activity]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const id = btn.getAttribute('data-remove-activity');
+      if(state.activities.length<=1) return;
+      if(!confirm('Remove this activity from the points guide? Points already logged under it are kept, just no longer listed here.')) return;
+      captureFormEdits();
+      state.activities = state.activities.filter(a=>a.id!==id);
+      await saveState();
+      render();
+    });
+  });
+
+  document.getElementById('save-activities').addEventListener('click', async ()=>{
+    captureFormEdits();
+    await saveState();
+    render();
+  });
+
+  document.getElementById('save-settings').addEventListener('click', async ()=>{
+    captureFormEdits();
+    await saveState();
+    render();
+  });
+
+  document.getElementById('reset-comp').addEventListener('click', async ()=>{
+    if(!confirm('Reset the scoreboard to zero? This clears the whole activity log and cannot be undone.')) return;
+    captureFormEdits();
+    state.log = [];
+    await saveState();
+    render();
+  });
+
+  document.getElementById('change-pin').addEventListener('click', async ()=>{
+    captureFormEdits();
+    const next = prompt('Set a new manager PIN (4+ characters):');
+    if(next===null) return;
+    if(next.trim().length<4){ alert('PIN needs to be at least 4 characters.'); return; }
+    state.pin = next.trim();
+    await saveState();
+    alert('PIN updated.');
+  });
+}
+
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderPinGate(errMsg){
+  const needsCreate = !state.pin;
+  let html = '<div class="pin-gate">';
+  html += '<div class="brand-badge">'+QOOKER_Q+'</div>';
+  html += '<h2>Team Manager</h2>';
+  if(needsCreate){
+    html += '<p>No manager PIN has been set yet. Create one now &ndash; you\'ll need it (and so will anyone else you share this link with) to add points or edit teams.</p>';
+    html += '<input type="password" id="pin-input" placeholder="Create a PIN" maxlength="12">';
+    html += '<button class="btn" id="pin-submit">Set PIN &amp; continue</button>';
+  } else {
+    html += '<p>Enter the manager PIN to add points, edit teams, or change settings.</p>';
+    html += '<input type="password" id="pin-input" placeholder="Enter PIN" maxlength="12">';
+    html += '<button class="btn" id="pin-submit">Unlock</button>';
+  }
+  html += '<div class="err">'+(errMsg||'')+'</div>';
+  html += '</div>';
+  document.getElementById('app').innerHTML = html;
+
+  const input = document.getElementById('pin-input');
+  const submit = ()=>{
+    const val = input.value.trim();
+    if(needsCreate){
+      if(val.length<4){ renderPinGate('PIN needs to be at least 4 characters.'); return; }
+      state.pin = val;
+      saveState();
+      adminUnlocked = true;
+      render();
+    } else {
+      if(val === state.pin){
+        adminUnlocked = true;
+        render();
+      } else {
+        renderPinGate('Incorrect PIN \u2013 try again.');
+      }
+    }
+  };
+  document.getElementById('pin-submit').addEventListener('click', submit);
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+  input.focus();
+}
+
+function startPolling(){
+  if(pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(async ()=>{
+    try{
+      const fresh = await loadState();
+      state = fresh;
+      render();
+    }catch(e){
+      console.error('Poll failed', e);
+    }
+  }, 7000);
+}
+
+function renderLoadError(){
+  document.getElementById('app').innerHTML =
+    '<div style="padding:60px 20px;text-align:center;font-family:\'Barlow Condensed\';color:#8a6b70;max-width:420px;margin:0 auto;">'+
+    'Couldn\u2019t connect to the scoreboard\u2019s data source. Check that the Google Sheet and its Apps Script are still deployed and reachable, then reload this page.'+
+    '</div>';
+}
+
+async function init(){
+  try{
+    state = await loadState();
+  }catch(e){
+    console.error('Initial load failed', e);
+    renderLoadError();
+    return;
+  }
+  if(isAdminLink){
+    if(adminUnlocked){ render(); }
+    else { renderPinGate(''); }
+  } else {
+    startPolling();
+    render();
+  }
+}
+
+init();
+</script>
+</body>
+</html>
