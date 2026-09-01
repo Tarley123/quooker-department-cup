@@ -217,6 +217,7 @@ function defaultActivities(){
   ];
 }
 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJi7AL1zwMn0CxTljH2rJq_wNQqi2hxyq7NQeGq4DZLSAN7IZyZOiDCZ3wbSlhnb8G/exec';
 const PALETTE = ["#E01446","#4A1220","#C2694B","#611A2C","#8a2f4f","#a8763f"];
 
 const STATE_KEY = 'cup_state_v1';
@@ -225,6 +226,7 @@ const isAdminLink = params.get('mode') === 'admin';
 let adminUnlocked = false;
 let state = null;
 let pollTimer = null;
+let lastLoadFailed = false;
 
 function defaultState(){
   const start = new Date();
@@ -248,22 +250,35 @@ function migrate(d){
 }
 
 async function loadState(){
-  try{
-    const r = await window.storage.get(STATE_KEY, true);
-    if(r && r.value){ return migrate(JSON.parse(r.value)); }
+  const bustUrl = GOOGLE_SCRIPT_URL + (GOOGLE_SCRIPT_URL.indexOf('?')===-1 ? '?' : '&') + 'ts=' + Date.now();
+  const res = await fetch(bustUrl, {method:'GET', cache:'no-store'});
+  if(!res.ok){ throw new Error('Server responded with '+res.status); }
+  const text = await res.text();
+  if(!text || !text.trim()){
     const d = defaultState();
-    await window.storage.set(STATE_KEY, JSON.stringify(d), true);
-    return d;
-  }catch(e){
-    const d = defaultState();
-    try{ await window.storage.set(STATE_KEY, JSON.stringify(d), true); }catch(e2){}
+    await saveStateRaw(d);
     return d;
   }
+  return migrate(JSON.parse(text));
+}
+
+async function saveStateRaw(data){
+  const res = await fetch(GOOGLE_SCRIPT_URL, {
+    method:'POST',
+    cache:'no-store',
+    headers: {'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(data)
+  });
+  if(!res.ok){ throw new Error('Server responded with '+res.status); }
 }
 
 async function saveState(){
-  try{ await window.storage.set(STATE_KEY, JSON.stringify(state), true); }
-  catch(e){ console.error('Save failed', e); }
+  try{
+    await saveStateRaw(state);
+  }catch(e){
+    console.error('Save failed', e);
+    alert('Could not save that change \u2013 check your internet connection and try again. (If this keeps happening, the Google Sheet connection may need re-checking.)');
+  }
 }
 
 function totalsByTeam(){
@@ -495,13 +510,17 @@ function wireAdminForms(){
     refreshBtn.addEventListener('click', async ()=>{
       captureFormEdits();
       if(!confirm('Pull the latest from the server? Any unsaved edits here will be kept locally but not yet saved.')) return;
-      const server = await loadState();
-      server.teams = state.teams;
-      server.activities = state.activities;
-      server.startDate = state.startDate;
-      server.durationDays = state.durationDays;
-      state = server;
-      render();
+      try{
+        const server = await loadState();
+        server.teams = state.teams;
+        server.activities = state.activities;
+        server.startDate = state.startDate;
+        server.durationDays = state.durationDays;
+        state = server;
+        render();
+      }catch(e){
+        alert('Could not reach the Google Sheet \u2013 check your connection and try again.');
+      }
     });
   }
 
@@ -654,14 +673,31 @@ function renderPinGate(errMsg){
 function startPolling(){
   if(pollTimer) clearInterval(pollTimer);
   pollTimer = setInterval(async ()=>{
-    const fresh = await loadState();
-    state = fresh;
-    render();
+    try{
+      const fresh = await loadState();
+      state = fresh;
+      render();
+    }catch(e){
+      console.error('Poll failed', e);
+    }
   }, 7000);
 }
 
+function renderLoadError(){
+  document.getElementById('app').innerHTML =
+    '<div style="padding:60px 20px;text-align:center;font-family:\'Barlow Condensed\';color:#8a6b70;max-width:420px;margin:0 auto;">'+
+    'Couldn\u2019t connect to the scoreboard\u2019s data source. Check that the Google Sheet and its Apps Script are still deployed and reachable, then reload this page.'+
+    '</div>';
+}
+
 async function init(){
-  state = await loadState();
+  try{
+    state = await loadState();
+  }catch(e){
+    console.error('Initial load failed', e);
+    renderLoadError();
+    return;
+  }
   if(isAdminLink){
     if(adminUnlocked){ render(); }
     else { renderPinGate(''); }
