@@ -227,6 +227,7 @@ let adminUnlocked = false;
 let state = null;
 let pollTimer = null;
 let lastLoadFailed = false;
+let guideOpen = false;
 
 function defaultState(){
   const start = new Date();
@@ -383,7 +384,7 @@ function render(){
   }
   html += '</div>';
 
-  html += '<details class="guide"><summary>Points guide</summary><div class="guide-grid">';
+  html += '<details class="guide"'+(guideOpen?' open':'')+'><summary>Points guide</summary><div class="guide-grid">';
   state.activities.forEach((a,i)=>{
     html += '<div class="g-act">'+escapeHtml(a.label)+'</div><div class="g-pt '+(a.pts>0?'pos':'neg')+'">'+(a.pts>0?'+':'')+a.pts+'</div>';
     if(i<state.activities.length-1) html += '<div class="guide-div"></div>';
@@ -396,7 +397,15 @@ function render(){
 
   html += '<div class="foot"><div>Department Cup</div><div class="rule"></div><div>'+(isAdminLink&&adminUnlocked?'Team Manager link':'Shared with the team')+'</div></div>';
 
+  const prevScroll = document.querySelector('.ticker') ? document.querySelector('.ticker').scrollTop : 0;
   document.getElementById('app').innerHTML = html;
+
+  const guideEl = document.querySelector('details.guide');
+  if(guideEl){
+    guideEl.addEventListener('toggle', ()=>{ guideOpen = guideEl.open; });
+  }
+  const tickerEl = document.querySelector('.ticker');
+  if(tickerEl){ tickerEl.scrollTop = prevScroll; }
 
   if(isAdminLink && adminUnlocked){
     document.querySelectorAll('[data-del]').forEach(btn=>{
